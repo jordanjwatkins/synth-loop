@@ -28,29 +28,11 @@ function synthLoop(config) {
 }
 
 function loop() {
-    var currentBeatEls;
-
-    startTime = startTime || knote.audioContext.currentTime;
-
-    nextBeatTime = startTime + currentBeat * beatDuration + (currentLoop * beatDuration * beatCount);
+    setTimes();
 
     if (shouldUpdate()) {
-        currentBeatEls = dom.find('.synth-loop__beat-' + (currentBeat + 1));
-
         queueBeatSounds();
-
-        setTimeout(function () {
-            dom.each(currentBeatEls, function (el) {
-                var currentClass = el.classList.contains('loop-1') ? 'loop-2' : 'loop-1';
-
-                el.classList.remove('loop-1');
-                el.classList.remove('loop-2');
-
-                setTimeout(function () {
-                    el.classList.add(currentClass);
-                }, 0);
-            });
-        }, nextBeatTime);
+        queueBeatVisuals();
     }
 
     setTimeout(function () {
@@ -58,6 +40,11 @@ function loop() {
             loop();
         }
     }, 10);
+}
+
+function setTimes() {
+    startTime = startTime || knote.audioContext.currentTime;
+    nextBeatTime = startTime + currentBeat * beatDuration + (currentLoop * beatDuration * beatCount);
 }
 
 function shouldUpdate() {
@@ -69,7 +56,7 @@ function shouldUpdate() {
 function queueBeatSounds() {
     var i;
 
-    noteConfig.start = startTime + currentBeat * beatDuration + (currentLoop * beatDuration * beatCount);
+    noteConfig.start = nextBeatTime;
     noteConfig.duration = beatDuration;
 
     for (i = 0; i < sounds.length; i++) {
@@ -88,6 +75,23 @@ function queueBeatSound(beat) {
     if (beat.active) {
         knote.playNote(beat.note, noteConfig);
     }
+}
+
+function queueBeatVisuals() {
+    var currentBeatEls = dom.find('.synth-loop__beat-' + (currentBeat + 1));
+
+    setTimeout(function () {
+        dom.each(currentBeatEls, function (el) {
+            var currentClass = el.classList.contains('loop-1') ? 'loop-2' : 'loop-1';
+
+            el.classList.remove('loop-1');
+            el.classList.remove('loop-2');
+
+            setTimeout(function () {
+                el.classList.add(currentClass);
+            }, 0);
+        });
+    }, nextBeatTime);
 }
 
 function makeSounds() {
