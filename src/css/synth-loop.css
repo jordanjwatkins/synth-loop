@@ -2,9 +2,12 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    user-select: none;
 
     &:before {
-        content: 'tap to start';
+        content: 'enable sound\A---\Atap to start';
+        white-space: pre;
+        line-height: 1;
         display: block;
         width: 100%;
         text-align: center;

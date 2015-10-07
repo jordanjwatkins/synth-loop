@@ -14,10 +14,5 @@ module.exports = {
     postcss: {
         files: ['src/css/*.css'],
         tasks: ['postcss']
-    },
-
-    watchifyRestart: {
-        files: 'src/js/**/*.js',
-        tasks: ['rewatchify']
     }
 };

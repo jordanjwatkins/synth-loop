@@ -5,7 +5,7 @@ module.exports = {
         tasks: [
             'watch:livereload',
             'watch:postcss',
-            'rewatchify',
+            'browserify:app',
             'connect'
         ],
         options: {
